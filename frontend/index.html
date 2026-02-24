@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hemant's Social - Friend Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <i class="fas fa-network-wired"></i>
+          <span>Hemant's Social</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="nav-btn" id="createUserNavBtn">
+            <i class="fas fa-user-plus"></i> Create User
+          </button>
+          <button class="nav-btn" id="addFriendNavBtn">
+            <i class="fas fa-handshake"></i> Add Friend
+          </button>
+          <button class="nav-btn" id="viewAllUsersNavBtn">
+            <i class="fas fa-users"></i> View Users
+          </button>
+        </div>
+        <div class="nav-status">
+          <span id="navConnectionBadge" class="badge-small muted">
+            <i class="fas fa-circle" style="font-size: 8px; margin-right: 4px;"></i>Connected
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1><i class="fas fa-heart"></i> Friend Recommendations</h1>
+        <p>Discover new connections based on mutual friends, location & interests</p>
+      </div>
+    </div>
+
+    <section class="showcase-band">
+      <article class="card showcase-card showcase-one">
+        <div class="showcase-overlay"></div>
+        <div class="showcase-text">
+          <h3>Neon Social Vibes</h3>
+          <p>High-intensity color mood with interactive motion.</p>
+        </div>
+      </article>
+      <article class="card showcase-card showcase-two">
+        <div class="showcase-overlay"></div>
+        <div class="showcase-text">
+          <h3>Live Visual Energy</h3>
+          <p>Dynamic cards react to hover and movement.</p>
+        </div>
+      </article>
+      <article class="card showcase-card showcase-three">
+        <div class="showcase-overlay"></div>
+        <div class="showcase-text">
+          <h3>Color Burst Theme</h3>
+          <p>Vibrant image layers with vivid gradient glow.</p>
+        </div>
+      </article>
+    </section>
+
+    <main class="container">
+      <section class="card profile-card">
+        <div class="card-header">
+          <h2><i class="fas fa-search"></i> Explore & Get Recommendations</h2>
+          <p class="card-subtitle">Find people you might want to connect with</p>
+        </div>
+        <form id="loadProfileForm" class="form-discovery">
+          <div class="input-group">
+            <input type="text" id="lookupUserId" placeholder="Enter your user ID" required />
+            <input type="number" id="radiusKm" value="120" min="1" placeholder="Search radius (km)" />
+            <button type="submit" class="btn btn-large btn-primary">
+              <i class="fas fa-compass"></i> Explore
+            </button>
+          </div>
+        </form>
+
+        <div id="profile" class="profile-section empty">
+          <div class="empty-state">
+            <i class="fas fa-user-circle"></i>
+            <p>Enter your user ID and click Explore to see your profile</p>
+          </div>
+        </div>
+
+        <div class="recommendations-layout">
+          <div id="recommendations" class="recommendations-section empty">
+            <div class="empty-state">
+              <i class="fas fa-star"></i>
+              <p>Personalized recommendations will appear here</p>
+            </div>
+          </div>
+
+          <aside class="mini-live-rail" aria-label="Live image frame">
+            <div class="mini-live-title">Live Frame</div>
+            <figure class="mini-live-card">
+              <img id="miniLiveImage" alt="Dynamic live visual" loading="lazy" />
+            </figure>
+          </aside>
+        </div>
+      </section>
+
+      <p id="message" class="message"></p>
+    </main>
+
+    <!-- Modal: Create User -->
+    <div id="createUserModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-user-plus"></i> Create New User</h2>
+          <button class="modal-close" id="closeCreateUserModal">&times;</button>
+        </div>
+        <form id="createUserForm" class="form-compact">
+          <input type="text" id="newUserId" placeholder="User ID (e.g., user123)" required />
+          <input type="text" id="newUsername" placeholder="Username (e.g., John)" required />
+          <input type="number" id="newLatitude" step="any" placeholder="Latitude" required />
+          <input type="number" id="newLongitude" step="any" placeholder="Longitude" required />
+          <input type="text" id="newInterests" placeholder="Interests (comma separated)" />
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-plus-circle"></i> Create User
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Add Friend -->
+    <div id="addFriendModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-link"></i> Add Friend</h2>
+          <button class="modal-close" id="closeAddFriendModal">&times;</button>
+        </div>
+        <form id="addFriendForm" class="form-compact">
+          <input type="text" id="sourceUserId" placeholder="Your User ID" required />
+          <input type="text" id="friendUserId" placeholder="Friend's User ID" required />
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-handshake"></i> Connect as Friends
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: View All Users -->
+    <div id="allUsersModal" class="modal">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h2><i class="fas fa-users"></i> All Users in Network</h2>
+          <button class="modal-close" id="closeAllUsersModal">&times;</button>
+        </div>
+        <div id="allUsersContainer" class="users-list">
+          <div class="empty-state">
+            <i class="fas fa-spinner"></i>
+            <p>Click the "View Users" button to load all users</p>
+          </div>
+        </div>
+        <div style="margin-top: 20px; text-align: center;">
+          <button type="button" id="loadAllUsersBtn" class="btn btn-primary">
+            <i class="fas fa-download"></i> Load All Users
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <p><i class="fas fa-code"></i> Built with Graph algorithms, Dijkstra & Priority Queues</p>
+        <p>© 2026 SocialNet Friend Recommendation System</p>
+      </div>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
